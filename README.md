@@ -1,3 +1,27 @@
+# Gensim 3.8.3 Fork
+
+## Fork Purpose
+This repository is a fork of the official [Gensim](https://github.com/RaRe-Technologies/gensim) library, specifically targeting version `3.8.3`. The fork addresses compatibility issues with [Flair 0.5](https://github.com/flairNLP/flair) and resolves breaking bugs in the upstream `3.8.3` version.
+
+## Why This Fork?
+- **Dependency Management**: The `label-parser` project relies on `Flair 0.5`. Flair depends on `Gensim 3.8.3`. However, the official release of Flair introduces issues while internally resolving to `Gensim 4.x`. This fork ensures `Flair 0.5` compatibility and retains the specific version required by the `label-parser`. (_The jhads/Flair-0.5 fork can be updated to pin gensim==3.8.3, but this version is itself bugged_).
+- **Bug Fixes**: Version `3.8.3` has a critical build issue that breaks functionality in certain contexts. This fork applies necessary patches to make it functional.
+
+## Changes in This Fork
+- **Fix numpy setup.py confusion**: Addressed a critical error caused by improper handling of the `__NUMPY_SETUP__` flag in setup scripts.
+
+### Patch:
+```diff
+@@ -111,7 +111,10 @@
+        # Prevent numpy from thinking it is still in its setup process
+        # https://docs.python.org/2/library/__builtin__.html#module-__builtin__
+-       __builtins__.__NUMPY_SETUP__ = False
++       try:
++           __builtins__.__NUMPY_SETUP__ = False
++       except AttributeError:
++           print("Could not set __NUMPY_SETUP__ = False")
+```
+
 gensim – Topic Modelling in Python
 ==================================
 
